@@ -10,7 +10,7 @@ import urwid
 import edsom_db
 
 cursor = u"\u2588"
-wave_obj = sa.WaveObject.from_wave_file("./electype.wav")
+wave_obj = sa.WaveObject.from_wave_file("./media/electype.wav")
 audio = True
 status_box_width = 80
 status_box_height = 8
