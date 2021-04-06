@@ -1,5 +1,4 @@
-# EDSOM #
-## Elite Dangerous Ships Onboard Mainframe ##
+# EDSOM (ED Ships Onboard Mainframe) #
 
 This README would normally document whatever steps are necessary to get your application up and running.
 
