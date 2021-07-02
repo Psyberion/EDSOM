@@ -9,8 +9,12 @@
 # Log files
 *.log
 
-# Ignore private database connection file
+# Ignore private config files
 edsom_db.py
+config.js
+
+# Ignore node.js installed modules
+node_modules/
 
 # Unit test reports
 TEST*.xml
