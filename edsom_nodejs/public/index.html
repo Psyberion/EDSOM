@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/styles.css">
+    <script src="/js/jquery-3.6.0.min.js"></script>
+    <script>
+        var electype;
+        var typeDelay = 30;
+        var timerId = null;
+        var msgQueue = [];
+        var blockChar = '\u2588';
+
+        function ProcessQueue() {
+            if (msgQueue.length == 0) {
+                timerId = null;
+                return;
+            }
+            let msg = msgQueue.shift();
+            let first = msg.substr(0,1);
+            let rest = msg.substr(1);
+            if (rest.length >= 1) {
+                msgQueue.unshift(rest);
+            }
+            let output = $('#statusText');
+            let content = output.text();
+            output.text(content.substr(0, content.length-1) + first + blockChar);
+            if (first != ' ' && first != '\n') {
+                electype.pause();
+                electype.currentTime = 0;
+                electype.play();
+            }
+            if (msgQueue.length > 0) {
+                timerId = setTimeout(ProcessQueue, typeDelay);
+            }
+            else {
+                timerId = null;
+            }
+        }
+
+        function AddMsg(msg) {
+            msgQueue.push(msg);
+            console.log(msgQueue);
+            if (timerId === null) {
+                timerId = setTimeout(ProcessQueue, typeDelay);
+            }
+        }
+
+        function UpdateDelay() {
+            typeDelay = parseInt($('input#delay').val());
+        }
+
+        function GetLastEvent() {
+            $.ajax({
+                url: "/api/lastEvent",
+                dataType: "json",
+                success: function(data) {
+                    //console.log(JSON.stringify(data));
+                    data.forEach(function(line){
+                        AddMsg('id: '+line.id+', type: '+line.type+'\n'); 
+                    });
+                }
+            })
+        }
+
+        $(function(){
+            electype = $('#electype')[0];
+            $('#statusText').text(blockChar);
+        });
+    </script>
+    <title>EDSOM node.js</title>
+</head>
+<body>
+    <h1>E.D.S.O.M.</h1>
+    <div id="statusDisplay"><pre><code id="statusText"></code></pre></div>
+    <input type="button" value="Start" onclick="GetLastEvent()">
+    <input type="text" id="delay" value="50" onchange="UpdateDelay()">
+    <audio id="electype" src="/audio/electype.wav" autoplay></audio>
+</body>
+</html>

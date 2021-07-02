@@ -1,0 +1,5 @@
+body { background-color: #111; color: #0d0; font-family: 'Courier New', monospace; font-size: large; }
+h1 { margin: 0px; }
+pre { margin: 0px; padding: 0px; }
+code { margin: 0px; padding: 0px; }
+div#statusDisplay { height:10.5em; border:1px solid #0d0; padding: 0.3em; margin-bottom: 0.5em; }
