@@ -11,7 +11,10 @@
         var typeDelay = 30;
         var timerId = null;
         var msgQueue = [];
-        var blockChar = '\u2588';
+        var msgDisplay = [];
+        var msgDisplayLine = 0;
+        var msgDisplayMaxLines = 10;
+        var blockChar = "\u2588";
 
         function ProcessQueue() {
             if (msgQueue.length == 0) {
@@ -19,15 +22,29 @@
                 return;
             }
             let msg = msgQueue.shift();
-            let first = msg.substr(0,1);
-            let rest = msg.substr(1);
-            if (rest.length >= 1) {
-                msgQueue.unshift(rest);
+            let first;
+            if (msg.length == 0) { // End of last line, move onto new line
+                let output = $(`#statusLine${msgDisplayLine}`);
+                let content = output.text();
+                output.text(content.substr(0, content.length-1));
+                msgDisplayLine++;
+                if (msgDisplayLine >= msgDisplayMaxLines) {
+                    
+                }
+                output = $(`#statusLine${msgDisplayLine}`);
+                output.text(blockChar);
             }
-            let output = $('#statusText');
-            let content = output.text();
-            output.text(content.substr(0, content.length-1) + first + blockChar);
-            if (first != ' ' && first != '\n') {
+            else {
+                first = msg.substr(0,1);
+                let rest = msg.substr(1);
+                //if (rest.length >= 1) {
+                    msgQueue.unshift(rest);
+                //}
+                let output = $(`#statusLine${msgDisplayLine}`);
+                let content = output.text();
+                output.text(content.substr(0, content.length-1) + first + blockChar);
+            }
+            if (first != " ") {
                 electype.pause();
                 electype.currentTime = 0;
                 electype.play();
@@ -41,8 +58,8 @@
         }
 
         function AddMsg(msg) {
+            msg = msg.replace(/[\r\n\x0B\x0C\u0085\u2028\u2029]+/g, "");
             msgQueue.push(msg);
-            console.log(msgQueue);
             if (timerId === null) {
                 timerId = setTimeout(ProcessQueue, typeDelay);
             }
@@ -59,7 +76,7 @@
                 success: function(data) {
                     //console.log(JSON.stringify(data));
                     data.forEach(function(line){
-                        AddMsg('id: '+line.id+', type: '+line.type+'\n'); 
+                        AddMsg("id: "+line.id+", type: "+line.type); 
                     });
                 }
             })
@@ -67,14 +84,25 @@
 
         $(function(){
             electype = $('#electype')[0];
-            $('#statusText').text(blockChar);
+            $(`#statusLine${msgDisplayLine}`).text(blockChar);
         });
     </script>
     <title>EDSOM node.js</title>
 </head>
 <body>
     <h1>E.D.S.O.M.</h1>
-    <div id="statusDisplay"><pre><code id="statusText"></code></pre></div>
+    <div id="statusDisplay">
+        <div><pre><code id="statusLine0"></code></pre></div>
+        <div><pre><code id="statusLine1"></code></pre></div>
+        <div><pre><code id="statusLine2"></code></pre></div>
+        <div><pre><code id="statusLine3"></code></pre></div>
+        <div><pre><code id="statusLine4"></code></pre></div>
+        <div><pre><code id="statusLine5"></code></pre></div>
+        <div><pre><code id="statusLine6"></code></pre></div>
+        <div><pre><code id="statusLine7"></code></pre></div>
+        <div><pre><code id="statusLine8"></code></pre></div>
+        <div><pre><code id="statusLine9"></code></pre></div>
+    </div>
     <input type="button" value="Start" onclick="GetLastEvent()">
     <input type="text" id="delay" value="50" onchange="UpdateDelay()">
     <audio id="electype" src="/audio/electype.wav" autoplay></audio>

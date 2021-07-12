@@ -1,20 +1,19 @@
 {
   "name": "edsom_nodejs",
   "version": "1.0.0",
-  "description": "",
+  "description": "Elite Dangerous Ships Onboard Mainframe",
   "main": "index.js",
   "scripts": {
-    "start": "node index",
-    "dev": "nodemon index"
+    "start": "node index.js",
+    "dev": "nodemon index.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "David McMurray",
+  "license": "GPL-3.0-only",
   "dependencies": {
     "express": "^4.17.1",
     "mysql": "^2.18.1"
   },
   "devDependencies": {
-    "nodemon": "^2.0.7"
+    "nodemon": "^2.0.9"
   }
 }

@@ -9,7 +9,8 @@ app.get('/api/lastEvent', (req, res) => {
     var cnn = mysql.createConnection(config.db);
     cnn.connect();
     //cnn.query("SELECT id, type FROM event WHERE id = (SELECT MAX(id) FROM event WHERE parsed = 'Y');",
-    cnn.query("SELECT id, type FROM event ORDER BY id DESC LIMIT 5;",
+    //cnn.query("SELECT id, type FROM event ORDER BY id DESC LIMIT 5;",
+    cnn.query("SELECT id, type FROM event WHERE id >= 102900 ORDER BY id LIMIT 10;",
         function (error, results, fields) {
             if (error) throw error;
             console.log(`The last event is: ${results[0].id} (${results[0].type})`);

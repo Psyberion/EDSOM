@@ -15,7 +15,6 @@ config.js
 
 # Ignore node.js installed modules
 node_modules/
-package-lock.json
 
 # Unit test reports
 TEST*.xml
